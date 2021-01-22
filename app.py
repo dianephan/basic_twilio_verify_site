@@ -40,58 +40,25 @@ def enter_phonenumber():
     phoneNumberEmpty = True
     username = session['username']
     if request.method == 'POST':
-        print("[INFO] : inside post request now ")
-        if request.form['phonenumber'] == 'submitphone':
-            print("[INFO] : inside enter phone number now ")
-            phonenumber = request.form['phonenumber']
-            session['phonenumber'] = phonenumber
-            print("[INFO] : session['phonenumber'] = ", phonenumber)
-            if phonenumber: 
-                return redirect(url_for('generate_verification_code'))
-            else:
-                error = "Enter valid phone number."
-                return render_template('verifypage.html', error = error)
-        if request.form['verificationcode'] == 'submitcode':
-            showVerificationCode = True
-            print("[INFO] : phone number was entered. create verification token here ")
-            verification = client.verify \
-                                .services('VA91633fe446b254e04b85121e14579658') \
-                                .verifications \
-                                .create(to=session['phonenumber'], channel='sms')
-            print("[INFO] : verification sent ")
-            return render_template('verifypage.html', username = username, showVerificationCode = showVerificationCode)
-
+        print("[INFO] : inside enter phone number now ")
+        phonenumber = request.form['phonenumber']
+        session['phonenumber'] = phonenumber    
+        print("[INFO] : session['phonenumber'] = ", phonenumber)
+        if phonenumber: 
+            return redirect(url_for('generate_verification_code'))
+        else:
+            error = "Enter valid phone number."
+            return render_template('verifypage.html', error = error)
     return render_template('verifypage.html', username = username, phoneNumberEmpty = phoneNumberEmpty)
 
-
-
-
-
-
-# @app.route('/enterphone', methods=['GET', 'POST'])
-# def enter_phonenumber():
-#     phoneNumberEmpty = True
-#     username = session['username']
-#     if request.method == 'POST':
-#         print("[INFO] : inside enter phone number now ")
-#         phonenumber = request.form['phonenumber']
-#         session['phonenumber'] = phonenumber    
-#         print("[INFO] : session['phonenumber'] = ", phonenumber)
-#         if phonenumber: 
-#             return redirect(url_for('generate_verification_code'))
-#         else:
-#             error = "Enter valid phone number."
-#             return render_template('verifypage.html', error = error)
-#     return render_template('verifypage.html', username = username, phoneNumberEmpty = phoneNumberEmpty)
-
-# @app.route('/verifyme', methods=['GET', 'POST'])
-# def generate_verification_code():
-#     username = session['username']
-#     showVerificationCode = True
-#     print("[INFO] : phone number was entered. create verification token here ")
-#     verification = client.verify \
-#                         .services('VA91633fe446b254e04b85121e14579658') \
-#                         .verifications \
-#                         .create(to=session['phonenumber'], channel='sms')
-#     print("[INFO] : verification sent ")
-#     return render_template('verifypage.html', username = username, showVerificationCode = showVerificationCode)
+@app.route('/verifyme', methods=['GET', 'POST'])
+def generate_verification_code():
+    username = session['username']
+    showVerificationCode = True
+    print("[INFO] : phone number was entered. create verification token here ")
+    verification = client.verify \
+                        .services('VXXXXXX') \
+                        .verifications \
+                        .create(to=session['phonenumber'], channel='sms')
+    print("[INFO] : verification sent ")
+    return render_template('verifypage.html', username = username, showVerificationCode = showVerificationCode)

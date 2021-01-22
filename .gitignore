@@ -1,2 +1,4 @@
 settings.py
 kapp.py
+/venv
+__pycache__
