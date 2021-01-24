@@ -1,4 +1,4 @@
-settings.py
 kapp.py
 /venv
 __pycache__
+.env

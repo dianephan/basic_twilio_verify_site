@@ -9,16 +9,15 @@
     <h1 class="title">
       Please verify your account {{username}}
     </h1>
-
+    {% if error %}
+    <p class=error><strong>Error:</strong> {{ error }}
+    {% endif %}
     {% if phoneNumberEmpty %}
     <form method="POST">
       <div class="field">
         <label class="label">Enter your phone number in E.164 format to receive the verification code. (example: +14087771217)</label>
         <div class="control has-icons-left has-icons-right">
           <input class="input" type="text" name="phonenumber" placeholder="Phone Number">
-          <span class="icon is-small is-left">
-            <i class="fas fa-user"></i>
-          </span>
         </div>
       </div>
       <div class="field">
@@ -30,11 +29,10 @@
       </div>
     </form>
   {% endif %}
-
   {% if showVerificationCode %}
     <form method="POST">
       <div class="field">
-        <label class="label">Enter the code sent to your phone number above</label>
+        <label class="label">Enter the code sent to your phone number.</label>
           <input class="input" type="password" name= "verificationcode" placeholder="verificationcode">
         </p>
       </div>

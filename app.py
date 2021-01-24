@@ -1,19 +1,21 @@
 import os
+from dotenv import load_dotenv
 from twilio.rest import Client
 from flask import Flask, request, render_template, redirect, session, url_for
 from twilio.rest import Client
 from twilio.base.exceptions import TwilioRestException
 
+load_dotenv()
 app = Flask(__name__)
-app.secret_key = 'verificationworks'
+app.secret_key = 'secretkeyfordungeon'
 app.config.from_object('settings')
 
-client = Client(
-    app.config['TWILIO_ACCOUNT_SID'],
-    app.config['TWILIO_AUTH_TOKEN'])
+TWILIO_ACCOUNT_SID = os.environ.get('TWILIO_ACCOUNT_SID')
+TWILIO_AUTH_TOKEN= os.environ.get('TWILIO_AUTH_TOKEN')
+VERIFY_SERVICE_SID= os.environ.get('VERIFY_SERVICE_SID')
 
-VERIFY_SERVICE_SID = app.config['VERIFY_SERVICE_SID']
-MODERATOR = app.config['MODERATOR']
+client = Client()
+
 KNOWN_PARTICIPANTS = app.config['KNOWN_PARTICIPANTS']
 
 def check_verification_token(phone, token):
@@ -23,11 +25,7 @@ def check_verification_token(phone, token):
         .create(to=phone, code=token)    
     return check.status == 'approved'
 
-@app.route("/", methods=['GET'])
-def homepage():
-    return("hello")
-
-@app.route('/login', methods=['GET', 'POST'])
+@app.route('/', methods=['GET', 'POST'])
 def login():
     error = None
     if request.method == 'POST':
@@ -35,7 +33,6 @@ def login():
         password = request.form['password']
         if username in KNOWN_PARTICIPANTS and password == KNOWN_PARTICIPANTS.get(username):
             session['username'] = username
-            print("[INFO] : login successs going to verify now ")
             return redirect(url_for('enter_phonenumber'))
         error = "Invalid login credentials. Please try again."
         return render_template('index.html', error = error)
@@ -61,17 +58,15 @@ def generate_verification_code():
     phonenumber = session['phonenumber']    
     error = None
     showVerificationCode = True
-    # print("[INFO] : phone number was entered. create verification token here ")
     verification = client.verify \
         .services(VERIFY_SERVICE_SID) \
         .verifications \
         .create(to=session['phonenumber'], channel='sms')
-    # print("[INFO] : verification sent ")
     if request.method == 'POST':
         verificationcode = request.form['verificationcode']
         if check_verification_token(phonenumber, verificationcode):
-            return render_template('success.html')
+            return render_template('success.html', username = username)
         else:
             error = "Invalid verification code. Please try again."
-            return render_template('verifypage.html', error = error)
+            return render_template('verifypage.html', error = error, showVerificationCode = showVerificationCode)
     return render_template('verifypage.html', username = username, showVerificationCode = showVerificationCode)
