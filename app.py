@@ -7,7 +7,7 @@ from twilio.base.exceptions import TwilioRestException
 
 load_dotenv()
 app = Flask(__name__)
-app.secret_key = 'secretkeyfordungeon'
+app.secret_key = 'secretkeyfordungeonxxx'
 app.config.from_object('settings')
 
 TWILIO_ACCOUNT_SID = os.environ.get('TWILIO_ACCOUNT_SID')
@@ -63,8 +63,8 @@ def generate_verification_code():
         .verifications \
         .create(to=session['phonenumber'], channel='sms')
     if request.method == 'POST':
-        verificationcode = request.form['verificationcode']
-        if check_verification_token(phonenumber, verificationcode):
+        verificationCode = request.form['verificationcode']
+        if check_verification_token(phonenumber, verificationCode):
             return render_template('success.html', username = username)
         else:
             error = "Invalid verification code. Please try again."
