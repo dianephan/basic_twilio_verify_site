@@ -18,13 +18,6 @@ client = Client()
 
 KNOWN_PARTICIPANTS = app.config['KNOWN_PARTICIPANTS']
 
-def check_verification_token(phone, token):
-    check = client.verify \
-        .services(VERIFY_SERVICE_SID) \
-        .verification_checks \
-        .create(to=phone, code=token)    
-    return check.status == 'approved'
-
 @app.route('/', methods=['GET', 'POST'])
 def login():
     error = None
@@ -70,3 +63,10 @@ def generate_verification_code():
             error = "Invalid verification code. Please try again."
             return render_template('verifypage.html', error = error, showVerificationCode = showVerificationCode)
     return render_template('verifypage.html', username = username, showVerificationCode = showVerificationCode)
+
+def check_verification_token(phone, token):
+    check = client.verify \
+        .services(VERIFY_SERVICE_SID) \
+        .verification_checks \
+        .create(to=phone, code=token)    
+    return check.status == 'approved'
