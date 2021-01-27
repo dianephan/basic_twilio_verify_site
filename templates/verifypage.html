@@ -10,26 +10,8 @@
       Please verify your account {{username}}
     </h1>
     {% if error %}
-    <p class=error><strong>Error:</strong> {{ error }}
+      <p class=error><strong>Error:</strong> {{ error }}
     {% endif %}
-    {% if phoneNumberEmpty %}
-    <form method="POST">
-      <div class="field">
-        <label class="label">Enter your phone number in E.164 format to receive the verification code. (example: +14087771217)</label>
-        <div class="control has-icons-left has-icons-right">
-          <input class="input" type="text" name="phonenumber" placeholder="1408XXXYYYY">
-        </div>
-      </div>
-      <div class="field">
-        <p class="control">
-          <button type="submit" class="phone-number", value = "submitphone">
-            Submit Phone Number
-          </button>
-        </p>
-      </div>
-    </form>
-  {% endif %}
-  {% if showVerificationCode %}
     <form method="POST">
       <div class="field">
         <label class="label">Enter the code sent to your phone number.</label>
@@ -44,7 +26,5 @@
         </p>
       </div>
     </form>
-  {% endif %}
-
   </body>
 </html>
